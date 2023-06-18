@@ -1,0 +1,33 @@
+#!/usr/bin/python3
+
+import urllib.request
+import argparse
+import sys
+
+import html5lib
+import html5_parser
+
+ap = argparse.ArgumentParser()
+ap.add_argument("inputs", nargs="+", help="URLs or files")
+args = ap.parse_args()
+
+ret = 0
+
+hparser = html5lib.HTMLParser(strict=True)
+for inp in args.inputs:
+    try:
+        if "://" in inp:
+            with urllib.request.urlopen(inp) as r:
+                html = r.read()
+        else:
+            with open(inp) as f:
+                html = f.read()
+
+        html5_parser.parse(html)
+        hparser.parse(html)
+    except Exception as e:
+        print(f"Exception with {inp}")
+        print(e)
+        ret = 1
+
+sys.exit(ret)

@@ -22,12 +22,25 @@ for inp in args.inputs:
         else:
             with open(inp) as f:
                 html = f.read()
+    except Exception as e:
+        print(f"Exception {type(e).__name__} reading {inp}")
+        print(e)
+        ret = 1
+        continue
 
+    try:
         html5_parser.parse(html)
+    except Exception as e:
+        print(f"Exception {type(e).__name__} by html5_parser with {inp}")
+        print(e)
+        ret = 1
+
+    try:
         hparser.parse(html)
     except Exception as e:
-        print(f"Exception with {inp}")
+        print(f"Exception {type(e).__name__} by html5lib with {inp}")
         print(e)
+        print(hparser.errors)
         ret = 1
 
 sys.exit(ret)

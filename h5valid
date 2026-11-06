@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
+import pathlib
 import sys
 import urllib.request
 
@@ -20,8 +21,7 @@ for inp in args.inputs:
             with urllib.request.urlopen(inp) as r:
                 html = r.read()
         else:
-            with open(inp) as f:
-                html = f.read()
+            html = pathlib.Path(inp).read_text()
     except Exception as e:
         print(f"Exception {type(e).__name__} reading {inp}")
         print(e)
